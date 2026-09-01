@@ -11,9 +11,11 @@ package:
 source:
   url: https://github.com/dandavison/delta/archive/refs/tags/${{ version }}.tar.gz
   sha256: f59b86f8c8dda4d76a3ba34b8553777a20c3b461646917d8e480fac6531bba9f
+  patches:
+    - 0001-fallback-to-temporary-cache-directory.patch
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
@@ -33,8 +35,6 @@ tests:
         - if: target_platform == "win-arm64"
           then: ${{ compiler('c') }}
     script:
-      - if: win
-        then: set "HOME=%PREFIX%"
       - delta --version
       - delta --no-gitconfig --paging=never < test.diff > delta.out
       - if: win
