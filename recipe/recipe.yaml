@@ -33,6 +33,8 @@ tests:
         - if: target_platform == "win-arm64"
           then: ${{ compiler('c') }}
     script:
+      - if: win
+        then: set "HOME=%PREFIX%"
       - delta --version
       - delta --no-gitconfig --paging=never < test.diff > delta.out
       - if: win
