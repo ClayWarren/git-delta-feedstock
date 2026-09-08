@@ -11,9 +11,11 @@ package:
 source:
   url: https://github.com/dandavison/delta/archive/refs/tags/${{ version }}.tar.gz
   sha256: f59b86f8c8dda4d76a3ba34b8553777a20c3b461646917d8e480fac6531bba9f
+  patches:
+    - 0001-fallback-to-temporary-cache-directory.patch
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
@@ -25,8 +27,26 @@ requirements:
     - zlib
 
 tests:
-  - script:
+  - files:
+      recipe:
+        - test.diff
+    requirements:
+      run:
+        - if: target_platform == "win-arm64"
+          then: ${{ compiler('c') }}
+    script:
       - delta --version
+      - delta --no-gitconfig --paging=never < test.diff > delta.out
+      - if: win
+        then:
+          - findstr /C:"from delta" delta.out
+          - if errorlevel 1 exit 1
+      - if: unix
+        then: grep -F "from delta" delta.out
+      - if: target_platform == "win-arm64"
+        then:
+          - dumpbin /headers "%PREFIX%\bin\delta.exe" | findstr /I /C:"AA64 machine (ARM64)"
+          - if errorlevel 1 exit 1
 
 about:
   license: MIT
@@ -37,6 +57,7 @@ about:
   homepage: https://github.com/dandavison/delta
 
 extra:
+  feedstock-name: git-delta
   recipe-maintainers:
     - YYYasin19
     - pavelzw
