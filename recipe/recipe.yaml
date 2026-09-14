@@ -5,7 +5,7 @@ context:
   version: "0.19.2"
 
 package:
-  name: ${{ name | lower }}
+  name: git-delta
   version: ${{ version }}
 
 source:
@@ -49,7 +49,6 @@ about:
   homepage: https://github.com/dandavison/delta
 
 extra:
-  feedstock-name: git-delta
   recipe-maintainers:
     - YYYasin19
     - pavelzw
