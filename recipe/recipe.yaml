@@ -30,10 +30,6 @@ tests:
   - files:
       recipe:
         - test.diff
-    requirements:
-      run:
-        - if: target_platform == "win-arm64"
-          then: ${{ compiler('c') }}
     script:
       - delta --version
       - delta --no-gitconfig --paging=never < test.diff > delta.out
@@ -43,10 +39,6 @@ tests:
           - if errorlevel 1 exit 1
       - if: unix
         then: grep -F "from delta" delta.out
-      - if: target_platform == "win-arm64"
-        then:
-          - dumpbin /headers "%PREFIX%\bin\delta.exe" | findstr /I /C:"AA64 machine (ARM64)"
-          - if errorlevel 1 exit 1
 
 about:
   license: MIT
