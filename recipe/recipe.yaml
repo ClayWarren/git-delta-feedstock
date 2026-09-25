@@ -5,7 +5,7 @@ context:
   version: "0.19.2"
 
 package:
-  name: git-delta
+  name: ${{ name | lower }}
   version: ${{ version }}
 
 source:
