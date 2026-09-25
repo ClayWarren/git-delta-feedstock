@@ -1,11 +1,10 @@
 schema_version: 1
 
 context:
-  name: git-delta
   version: "0.19.2"
 
 package:
-  name: ${{ name | lower }}
+  name: git-delta
   version: ${{ version }}
 
 source:
